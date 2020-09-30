@@ -1,6 +1,7 @@
 # Task-manager
 https://tasks-managers.herokuapp.com/
 
-[![Maintainability](https://api.codeclimate.com/v1/badges/3a19ccc301a795c88c6d/maintainability)](https://codeclimate.com/github/cryptobfund/php-project-lvl3/maintainability)
-[![Test Coverage](https://api.codeclimate.com/v1/badges/3a19ccc301a795c88c6d/test_coverage)](https://codeclimate.com/github/cryptobfund/php-project-lvl3/test_coverage)
-[![SEOpageAnalyzer](https://github.com/cryptobfund/php-project-lvl3/workflows/SEOpageAnalyzer/badge.svg)](https://github.com/cryptobfund/php-project-lvl3/actions)
+[![hexlet-check](https://github.com/cryptobfund/php-project-lvl4/workflows/hexlet-check/badge.svg)](https://github.com/cryptobfund/php-project-lvl4/actions)
+[![Maintainability](https://api.codeclimate.com/v1/badges/cd9b56fc837395a82ad0/maintainability)](https://codeclimate.com/github/cryptobfund/php-project-lvl4/maintainability)
+[![Test Coverage](https://api.codeclimate.com/v1/badges/cd9b56fc837395a82ad0/test_coverage)](https://codeclimate.com/github/cryptobfund/php-project-lvl4/test_coverage)
+
