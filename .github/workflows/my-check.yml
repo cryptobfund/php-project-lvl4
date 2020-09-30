@@ -13,6 +13,11 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+      
+      # Downloads a copy of the code in your repository before running CI tests
+      - name: Check out repository code
+        uses: actions/checkout@v2
+            
       - name: Setup PHP
         # Action gives to setup the PHP environment to test application
         # https://github.com/shivammathur/setup-php
