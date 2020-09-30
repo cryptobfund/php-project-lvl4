@@ -1,4 +1,4 @@
-name: my-check
+name: SEOpageAnalyzer
 
 on:
   push:
@@ -12,12 +12,31 @@ jobs:
     # You must use a Linux environment when using service containers or container jobs
     runs-on: ubuntu-latest
 
+    # Service containers to run with `runner-job`
+    services:
+      # Label used to access the service container
+      postgres:
+        # Docker Hub image
+        image: postgres
+        # Provide the password for postgres
+        env:
+          POSTGRES_PASSWORD: postgres
+          DB_DATABASE: dblvl4
+        # Set health checks to wait until postgres has started
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+        ports:
+          # Maps tcp port 5432 on service container to the host
+          - 5432:5432
+
     steps:
-      
       # Downloads a copy of the code in your repository before running CI tests
       - name: Check out repository code
         uses: actions/checkout@v2
-            
+
       - name: Setup PHP
         # Action gives to setup the PHP environment to test application
         # https://github.com/shivammathur/setup-php
@@ -37,6 +56,18 @@ jobs:
 
       - name: Check lint
         run: make lint
+
+      - name: Connect to PostgreSQL
+        env:
+          DB_CONNECTION: pgsql
+          DB_PORT: 5432
+          DB_DATABASE: postgres
+          DB_USERNAME: postgres
+          DB_PASSWORD: postgres
+        run: |
+          cp .env.example .env
+          php artisan key:generate
+          php artisan migrate --force
 
       - name: Execute tests (Unit and Feature tests) via PHPUnit
         run: make test
