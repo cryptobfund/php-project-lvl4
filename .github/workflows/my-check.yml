@@ -1,0 +1,45 @@
+name: my-check
+
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+
+jobs:
+  # Label of the runner job
+  runner-job:
+    # You must use a Linux environment when using service containers or container jobs
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Setup PHP
+        # Action gives to setup the PHP environment to test application
+        # https://github.com/shivammathur/setup-php
+        uses: shivammathur/setup-php@v2
+        with:
+          # Specify the PHP version
+          php-version: '7.4'
+
+      - name: PHP Security Checker
+        uses: StephaneBour/actions-php-security-checker@1.0
+
+      - name: Validate composer.json and composer.lock
+        run: composer validate
+
+      - name: Install dependencies
+        run: composer install --prefer-dist --no-progress --no-suggest
+
+      - name: Check lint
+        run: make lint
+
+      - name: Execute tests (Unit and Feature tests) via PHPUnit
+        run: make test
+
+      - name: Test & publish code coverage
+        uses: paambaati/codeclimate-action@v2.6.0
+        env:
+          CC_TEST_REPORTER_ID: ${{secrets.CC_TEST_REPORTER_ID_MY}}
+        with:
+          coverageCommand: make test-coverage
+          coverageLocations: ${{github.workspace}}/coverage-report:clover
