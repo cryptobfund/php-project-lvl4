@@ -1,4 +1,4 @@
-name: SEOpageAnalyzer
+name: my-check
 
 on:
   push:
