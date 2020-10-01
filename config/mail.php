@@ -1,7 +1,12 @@
 <?php
 
 $token = getenv("MAILTRAP_API_TOKEN");
-$data = json_decode(file_get_contents("https://mailtrap.io/api/v1/inboxes.json?api_token={$token}"));
+
+if (empty($token)) {
+    $data = null;
+} else {
+    $data = json_decode(file_get_contents("https://mailtrap.io/api/v1/inboxes.json?api_token={$token}"));
+}
 $host = $data["domain"] ?? 'smtp.mailtrap.io';
 $port = $data["smtp_ports"][3] ?? '2525';
 $username = $data["username"] ?? 'null';
