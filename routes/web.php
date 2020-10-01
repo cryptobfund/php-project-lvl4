@@ -16,6 +16,17 @@ use Rollbar\Rollbar;
 */
 
 Route::get('/', function () {
+
+
+    $token = getenv("MAILTRAP_API_TOKEN");
+    if (empty($token)) {
+        $data = null;
+    } else {
+        $data = json_decode(file_get_contents("https://mailtrap.io/api/v1/inboxes.json?api_token={$token}"));
+    }
+    var_dump($data);
+
+
     return view('welcome');
 });
 
