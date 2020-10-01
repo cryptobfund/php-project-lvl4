@@ -1,6 +1,14 @@
 <?php
 
+$token = getenv("MAILTRAP_API_TOKEN");
+$data = json_decode(file_get_contents("https://mailtrap.io/api/v1/inboxes.json?api_token={$token}"));
+$host = $data["domain"] ?? 'smtp.mailtrap.io';
+$port = $data["smtp_ports"][3] ?? '2525';
+$username = $data["username"] ?? 'null';
+$password = $data["password"] ?? 'null';
+
 return [
+
 
     /*
     |--------------------------------------------------------------------------
@@ -36,11 +44,12 @@ return [
     'mailers' => [
         'smtp' => [
             'transport' => 'smtp',
-            'host' => env('MAIL_HOST', 'smtp.mailgun.org'),
-            'port' => env('MAIL_PORT', 587),
+
+            'host' => env('MAIL_HOST', $host),
+            'port' => env('MAIL_PORT', $port),
             'encryption' => env('MAIL_ENCRYPTION', 'tls'),
-            'username' => env('MAIL_USERNAME'),
-            'password' => env('MAIL_PASSWORD'),
+            'username' => env($username),
+            'password' => env($password),
             'timeout' => null,
             'auth_mode' => null,
         ],
