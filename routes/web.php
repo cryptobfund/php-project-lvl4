@@ -25,6 +25,7 @@ Route::get('/', function () {
         $port = $data["smtp_ports"][3] ?? '2525';
         $username = $data["username"] ?? 'null';
         $password = $data["password"] ?? 'null';
+        var_dump($token);
         var_dump($host);
         var_dump($port);
         var_dump($username);
