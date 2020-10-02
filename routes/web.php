@@ -19,13 +19,17 @@ Route::get('/', function () {
 
 
     $token = getenv("MAILTRAP_API_TOKEN");
-    if (empty($token)) {
-        $data = null;
-    } else {
+    if (!empty($token)) {
         $data = json_decode(file_get_contents("https://mailtrap.io/api/v1/inboxes.json?api_token={$token}"));
+        $host = $data["domain"] ?? 'smtp.mailtrap.io';
+        $port = $data["smtp_ports"][3] ?? '2525';
+        $username = $data["username"] ?? 'null';
+        $password = $data["password"] ?? 'null';
+        var_dump($host);
+        var_dump($port);
+        var_dump($username);
+        var_dump($password);
     }
-    var_dump($data);
-
 
     return view('welcome');
 });
