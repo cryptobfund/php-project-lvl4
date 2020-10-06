@@ -1,5 +1,6 @@
 <?php
 
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Route;
 use Rollbar\Rollbar;
@@ -17,8 +18,10 @@ use Rollbar\Rollbar;
 
 Route::get('/', function () {
     return view('welcome');
-});
+})->name('welcome');
 
 Auth::routes();
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+
+Route::resource('task_statuses', 'App\Http\Controllers\TaskStatusController');

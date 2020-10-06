@@ -6,6 +6,7 @@
 
     <!-- CSRF Token -->
     <meta name="csrf-token" content="{{ csrf_token() }}">
+    <meta name="csrf-param" content="_token" />
 
     <title>{{ config('app.name', 'Laravel') }}</title>
 
@@ -33,7 +34,9 @@
                 <div class="collapse navbar-collapse" id="navbarSupportedContent">
                     <!-- Left Side Of Navbar -->
                     <ul class="navbar-nav mr-auto">
-
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ route('task_statuses.index') }}">taskStatuses</a>
+                        </li>
                     </ul>
 
                     <!-- Right Side Of Navbar -->
@@ -73,6 +76,7 @@
         </nav>
 
         <main class="py-4">
+            @include('flash::message')
             @yield('content')
         </main>
     </div>
