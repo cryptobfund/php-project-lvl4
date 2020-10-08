@@ -24,4 +24,6 @@ Auth::routes();
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 
+Route::resource('tasks', 'App\Http\Controllers\TaskController');
+
 Route::resource('task_statuses', 'App\Http\Controllers\TaskStatusController');

@@ -53,11 +53,11 @@ class TaskStatusController extends Controller
         }
 
         //create new record
-        $taskStatus = new TaskStatus();
         $data = $request->input('name');
+        $taskStatus = new TaskStatus();
         $taskStatus->fill(['name' => $data])->save();
 
-        flash(__('task_status_massages.added'));
+        flash(__('task_status_massages.added'))->success();
         return redirect()->route('task_statuses.index');
     }
 
@@ -103,7 +103,7 @@ class TaskStatusController extends Controller
         $data = $request->input('name');
         $taskStatus->fill(['name' => $data])->save();
 
-        flash(__('task_status_massages.updated'));
+        flash(__('task_status_massages.updated'))->success();
         return redirect()->route('task_statuses.index');
     }
 
@@ -117,8 +117,10 @@ class TaskStatusController extends Controller
     {
         if ($taskStatus) {
             $taskStatus->delete();
+            flash(__('task_status_massages.removed'))->success();
+            return redirect()->route('task_statuses.index');
         }
-        flash(__('task_status_massages.removed'));
+        flash(__('task_status_massages.removed'))->success();
         return redirect()->route('task_statuses.index');
     }
 }
