@@ -100,7 +100,7 @@ class TasksTest extends TestCase
 
     public function testShow()
     {
-        $response = $this->get(route('tasks.show'));
+        $response = $this->get(route('tasks.show', $this->task));
         $response->assertOk();
     }
 }
