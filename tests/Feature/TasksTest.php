@@ -97,4 +97,10 @@ class TasksTest extends TestCase
         $response->assertSessionHasNoErrors();
         $this->assertDeleted('tasks', [$this->task]);
     }
+
+    public function testShow()
+    {
+        $response = $this->get(route('tasks.show'));
+        $response->assertOk();
+    }
 }

@@ -43,5 +43,9 @@ return [
     'label_status' => 'Status',
     'label_assignee' => 'Assignee',
     'default_status' => 'Status',
-    'default_assignee' => 'Assignee'
+    'default_assignee' => 'Assignee',
+
+    //show form
+    'header_show' => 'Task: проверка кириллицы'
+
 ];

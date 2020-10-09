@@ -18,7 +18,7 @@
     </div>
     <div>
         <label for="assigned_to_id">{{__('task_massages.label_assignee')}}</label>
-        <select name="assigned_to_id" id="assigned_to_id" required>
+        <select name="assigned_to_id" id="assigned_to_id">
             <option selected value="{{$task->assigned_to_id ?? ''}}">{{$task->assignee->name ?? __('task_massages.default_assignee')}}</option>
             @foreach($params['users'] as $user)
                 <option value="{{$user->id}}">{{$user->name}}</option>
