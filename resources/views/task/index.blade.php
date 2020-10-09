@@ -27,7 +27,7 @@
                 <a href="{{route("tasks.show", $task)}}">{{$task->name}}</a>
             </th>
             <th>{{$task->creator->name}}</th>
-            <th>{{$task->assignee->name}}</th>
+            <th>{{$task->assignee->name ?? ''}}</th>
             <th>{{date_format($task->created_at, 'M d Y' )}}</th>
             @auth
                 <th>

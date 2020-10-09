@@ -8,7 +8,8 @@
         </h1>
         <p>Name: {{$task->name}}</p>
         <p>Status: {{$task->status->name}}</p>
-        <p>Description: {{$task->description}}</p>
+        <p>Description: {{$task->description ?? ''}}</p>
+        <p>Assignee: {{$task->assignee->name ?? ''}}</p>
         <p>Labels:</p>
     </div>
 
