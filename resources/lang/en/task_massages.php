@@ -44,8 +44,10 @@ return [
     'label_assignee' => 'Assignee',
     'default_status' => 'Status',
     'default_assignee' => 'Assignee',
+    'default_creator' => 'Creator',
+    'label_labels' => 'Labels',
 
     //show form
-    'header_show' => 'Task: проверка кириллицы'
+    'header_task' => 'Task'
 
 ];

@@ -2,12 +2,15 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Label;
 use App\Models\Task;
 use App\Models\TaskStatus;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
+use Spatie\QueryBuilder\AllowedFilter;
+use Spatie\QueryBuilder\QueryBuilder;
 
 class TaskController extends Controller
 {
@@ -20,32 +23,51 @@ class TaskController extends Controller
     {
         return [
             'taskStatuses' => TaskStatus::all(),
-            'users' => User::all()
+            'users' => User::all(),
+            'labels' => Label::all()
         ];
     }
 
     /**
      * Display a listing of the resource.
      *
-     * @return \Illuminate\Http\Response
+     * @param Request $request
+     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View
      */
 
-    public function index()
+    public function index(Request $request)
     {
-        $tasks = Task::all();
+        $filter = $request->input('filter');
+        $tasks = QueryBuilder::for(Task::class)
+            ->allowedFilters([
+                AllowedFilter::exact('status_id'),
+                AllowedFilter::exact('created_by_id'),
+                AllowedFilter::exact('assigned_to_id'),
+            ])
+            ->get();
+
+        $filterActiveValues = [];
+        if ($filter) {
+            $filterActiveValues = [
+                'taskStatusName' => $filter['status_id'] ? TaskStatus::find($filter['status_id'])->name : null,
+                'taskCreatorName' => $filter['created_by_id'] ? User::find($filter['created_by_id'])->name : null,
+                'taskAssigneeName' => $filter['assigned_to_id'] ? User::find($filter['assigned_to_id'])->name : null,
+            ];
+        }
         $params = $this->getIndexViewParams();
-        return view('task.index', compact('tasks', 'params'));
+        return view('task.index', compact('tasks', 'params', 'filter', 'filterActiveValues'));
     }
 
     /**
      * Show the form for creating a new resource.
      *
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View
      */
     public function create()
     {
         $task = new Task();
         $params = $this->getIndexViewParams();
+
         return view('task.create', compact('task', 'params'));
     }
 
@@ -53,13 +75,13 @@ class TaskController extends Controller
      * Store a newly created resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\RedirectResponse
      */
     public function store(Request $request)
     {
         //Validation
         $validator = Validator::make($request->all(), [
-            'name' => 'required',
+            'name' => 'required|unique:tasks',
             'description' => 'nullable',
             'status_id' => 'required',
             'assigned_to_id' => 'nullable'
@@ -76,9 +98,11 @@ class TaskController extends Controller
         $task = new Task();
         $task->fill($data);
         $user = Auth::user();
-        $task->created_by_id = $user->id;
+        $task->creator()->associate($user);
         $task->save();
-
+        foreach ($data['labels'] as $label) {
+            $task->labels()->attach($label);
+        }
         flash(__('task_massages.added'))->success();
         return redirect()->route('tasks.index');
     }
@@ -87,7 +111,7 @@ class TaskController extends Controller
      * Display the specified resource.
      *
      * @param  \App\Models\Task  $task
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View
      */
     public function show(Task $task)
     {
@@ -99,7 +123,7 @@ class TaskController extends Controller
      * Show the form for editing the specified resource.
      *
      * @param  \App\Models\Task  $task
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View
      */
     public function edit(Task $task)
     {
@@ -112,7 +136,7 @@ class TaskController extends Controller
      *
      * @param  \Illuminate\Http\Request  $request
      * @param  \App\Models\Task  $task
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\RedirectResponse
      */
     public function update(Request $request, Task $task)
     {
@@ -132,9 +156,13 @@ class TaskController extends Controller
 
         //update record
         $data = $request->input();
-        $task
-            ->fill($data)
-            ->save();
+        $task->fill($data)->save();
+
+        $task->labels()->detach();
+        foreach ($data['labels'] as $label) {
+            $task->labels()->attach($label);
+        }
+
         flash(__('task_massages.updated'))->success();
         return redirect()->route('tasks.index');
     }
@@ -143,7 +171,7 @@ class TaskController extends Controller
      * Remove the specified resource from storage.
      *
      * @param  \App\Models\Task  $task
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\RedirectResponse
      */
     public function destroy(Task $task)
     {

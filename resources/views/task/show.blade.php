@@ -3,14 +3,20 @@
 @section('content')
     <div>
         <h1>
-            {{__('task_massages.header_show')}}
+            {{__('task_massages.header_task')}}: {{$task->name}}
             <a href="{{route('tasks.edit', $task)}}">&#9881;</a>
         </h1>
-        <p>Name: {{$task->name}}</p>
-        <p>Status: {{$task->status->name}}</p>
-        <p>Description: {{$task->description ?? ''}}</p>
-        <p>Assignee: {{$task->assignee->name ?? ''}}</p>
-        <p>Labels:</p>
+        <p>{{__('task_massages.label_name')}}: {{$task->name}}</p>
+        <p>{{__('task_massages.label_status')}}: {{$task->status->name}}</p>
+        <p>{{__('task_massages.label_description')}}: {{$task->description ?? ''}}</p>
+        <p>{{__('task_massages.label_assignee')}}: {{$task->assignee->name ?? ''}}</p>
+        <p>{{__('task_massages.label_labels')}}:
+            <ul>
+                @foreach($task->labels()->get() as $label)
+                    <li>{{$label->name}}</li>
+                @endforeach
+            </ul>
+        </p>
     </div>
 
 

@@ -27,3 +27,5 @@ Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name
 Route::resource('tasks', 'App\Http\Controllers\TaskController');
 
 Route::resource('task_statuses', 'App\Http\Controllers\TaskStatusController');
+
+Route::resource('labels', 'App\Http\Controllers\LabelController');

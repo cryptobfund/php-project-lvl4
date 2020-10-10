@@ -25,4 +25,18 @@
             @endforeach
         </select>
     </div>
+    <div>
+        <label for="labels">{{__('task_massages.label_labels')}}</label>
+        <select name="labels[]" multiple id="labels" size="5">
+            <option selected value=""></option>
+            @foreach($params['labels'] as $label)
+                @if($task->labels()->get()->contains($label))
+                    <option selected value="{{$label->id}}">{{$label->name}}</option>
+                @else
+                    <option value="{{$label->id}}">{{$label->name}}</option>
+                @endif
+            @endforeach
+        </select>
+    </div>
+
 </div>
