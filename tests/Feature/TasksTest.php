@@ -86,11 +86,6 @@ class TasksTest extends TestCase
 
     public function testDelete()
     {
-//        $response = $this
-//            ->actingAs($this->user)
-//            ->delete(route('tasks.destroy', $this->task));
-//        //$response->assertUnauthorized();
-
         $response = $this
             ->actingAs($this->task->creator)
             ->delete(route('tasks.destroy', $this->task));
