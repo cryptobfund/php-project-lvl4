@@ -178,6 +178,7 @@ class TaskController extends Controller
         $user = Auth::user();
         if ($user->can('delete', $task)) {
             if ($task) {
+                $task->labels()->detach();
                 $task->delete();
                 flash(__('task_massages.removed'))->success();
             }
