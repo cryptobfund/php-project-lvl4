@@ -1,14 +1,14 @@
 @extends('layouts.app')
 
 @section('content')
-    <div><h1>{{__('label_massages.edit_label')}}</h1></div>
+<h1 class="mb-5">{{__('label_massages.edit_label')}}</h1>
 
-    <form method="POST" action="{{route("labels.update", $label)}}">
-        @method('PATCH')
-        @csrf
-        @include('label.form')
-        <input type="submit" value="{{__('label_massages.update')}}">
-    </form>
+<form method="POST" action="{{route("labels.update", $label)}}" accept-charset="UTF-8" class="w-50">
+    @method('PATCH')
+    @csrf
+    @include('label.form')
+    <input class="btn btn-primary" type="submit" value="{{__('label_massages.update')}}">
+</form>
 @endsection
 
 
