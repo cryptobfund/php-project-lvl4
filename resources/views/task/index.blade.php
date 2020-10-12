@@ -3,7 +3,7 @@
 @section('content')
 <h1 class="mb-5">{{__('task_massages.tasks')}}</h1>
 
-<div class="d-flex">
+<div class="d-flex shadow p-3 mb-2 rounded">
     <div>
         <form method="GET" action="{{route('tasks.index')}}" accept-charset="UTF-8" class="form-inline">
 
@@ -46,11 +46,10 @@
     @auth
         <a href="{{route("tasks.create")}}" class="btn btn-primary ml-auto">{{__('task_massages.add_new')}}</a>
     @endauth
-
 </div>
-
-<table class="table mt-2">
-    <thead>
+<div class="shadow p-3 rounded">
+<table class="table mt-2 table-hover table-striped">
+    <thead class="text-muted">
         <tr>
             <th>{{__('task_massages.col_id')}}</th>
             <th>{{__('task_massages.col_status')}}</th>
@@ -86,5 +85,6 @@
         @endforeach
     </tbody>
 </table>
+</div>
 
 @endsection

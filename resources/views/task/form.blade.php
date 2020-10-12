@@ -4,7 +4,7 @@
 </div>
 <div class="form-group">
     <label for="description">{{__('task_massages.label_description')}}</label>
-    <textarea class="form-control" name="description" cols="50" rows="10" id="description">{{$task->description ?? ''}}</textarea>
+    <textarea class="form-control" name="description" cols="50" rows="5" id="description">{{$task->description ?? ''}}</textarea>
 </div>
 <div class="form-group">
     <label for="status_id">{{__('task_massages.label_status')}}</label>

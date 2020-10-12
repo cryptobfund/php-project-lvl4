@@ -4,5 +4,5 @@
 </div>
 <div class="form-group">
     <label for="description">{{__('label_massages.label_description')}}</label>
-    <textarea class="form-control" name="description" cols="50" rows="10" id="description">{{$label->description ?? ''}}</textarea>
+    <textarea class="form-control" name="description" cols="50" rows="5" id="description">{{$label->description ?? ''}}</textarea>
 </div>

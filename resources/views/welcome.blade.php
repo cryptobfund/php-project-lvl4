@@ -2,7 +2,7 @@
 
 @section('content')
     <div class="container">
-            <div class="jumbotron">
+            <div class="jumbotron shadow rounded">
                     <h1 class="display-4">{{__('welcome.app_name')}}</h1>
                     <p class="lead">{{__('welcome.app_description')}}</p>
                     <hr class="my-4">
