@@ -7,7 +7,7 @@
 <a href="{{route("task_statuses.create")}}" class="btn btn-primary">{{__('task_status_massages.add_new')}}</a>
 @endauth
 
-<div class="shadow p-3 rounded">
+<div class="shadow p-lg-5 p-md-4 p-sm-3 p-2 rounded">
     <table class="table mt-2 table-hover table-striped">
         <thead class="text-muted">
             <tr>
