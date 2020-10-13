@@ -178,7 +178,7 @@ return [
 
         Rollbar\Laravel\RollbarServiceProvider::class,
 
-        Barryvdh\LaravelIdeHelper\IdeHelperServiceProvider::class
+        //Barryvdh\LaravelIdeHelper\IdeHelperServiceProvider::class
 
     ],
 
