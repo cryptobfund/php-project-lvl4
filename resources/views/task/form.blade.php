@@ -1,39 +1,34 @@
 <div class="form-group">
-    <label for="name">{{__('task_massages.label_name')}}</label>
-    <input class="form-control" type="text" name="name" id="name" value="{{$task->name ?? ''}}">
+
+    {{Form::label('name', __('task_massages.label_name'))}}
+    {{Form::text('name', $task->name, ['class' => 'form-control'])}}
+
 </div>
+
 <div class="form-group">
-    <label for="description">{{__('task_massages.label_description')}}</label>
-    <textarea class="form-control" name="description" cols="50" rows="5" id="description">{{$task->description ?? ''}}</textarea>
+
+    {{Form::label('description', __('task_massages.label_description'))}}
+    {{Form::textarea('description', $task->description, ['class' => 'form-control', 'cols' => '50', 'rows' => '5'])}}
+
 </div>
+
 <div class="form-group">
-    <label for="status_id">{{__('task_massages.label_status')}}</label>
-    <select class="form-control" name="status_id" id="status_id">
-        <option selected value="{{$task->status_id ?? 1}}">{{$task->status->name ?? __('task_massages.default_status')}}</option>
-        @foreach($params['taskStatuses'] as $status)
-            <option value="{{$status->id}}">{{$status->name}}</option>
-        @endforeach
-    </select>
+
+    {{Form::label('status_id', __('task_massages.label_status'))}}
+    {{Form::select('status_id', $params['taskStatusesForSelect'], $task->status_id ?? 1, ['placeholder' => __('task_massages.default_status'), 'class' => 'form-control'])}}
+
 </div>
+
 <div class="form-group">
-    <label for="assigned_to_id">{{__('task_massages.label_assignee')}}</label>
-    <select class="form-control" name="assigned_to_id" id="assigned_to_id">
-        <option selected value="{{$task->assigned_to_id ?? ''}}">{{$task->assignee->name ?? __('task_massages.default_assignee')}}</option>
-        @foreach($params['users'] as $user)
-            <option value="{{$user->id}}">{{$user->name}}</option>
-        @endforeach
-    </select>
+
+    {{Form::label('assigned_to_id', __('task_massages.label_assignee'))}}
+    {{Form::select('assigned_to_id', $params['usersForSelect'], $task->assigned_to_id ?? null, ['placeholder' => __('task_massages.default_assignee'), 'class' => 'form-control'])}}
+
 </div>
+
 <div class="form-group">
-    <label for="labels">{{__('task_massages.label_labels')}}</label>
-    <select class="form-control" name="labels[]" multiple id="labels" size="5">
-        <option selected value=""></option>
-        @foreach($params['labels'] as $label)
-            @if($task->labels()->get()->contains($label))
-                <option selected value="{{$label->id}}">{{$label->name}}</option>
-            @else
-                <option value="{{$label->id}}">{{$label->name}}</option>
-            @endif
-        @endforeach
-    </select>
+
+    {{Form::label('labels', __('task_massages.label_labels'))}}
+    {{Form::select('labels[]', $params['labelsForSelect'], $params['labelsForSelectSelected'], ['placeholder' => "", 'class' => 'form-control', 'multiple', 'size' => '5'])}}
+
 </div>

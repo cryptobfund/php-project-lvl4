@@ -16,7 +16,7 @@ return [
 
     //create form
     'new_status' => 'Add New Task Status',
-    'Create' => 'Create',
+    'create' => 'Create',
 
     //index form
     'task_statuses' => 'Task Statuses',

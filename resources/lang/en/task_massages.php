@@ -16,11 +16,12 @@ return [
 
     //create form
     'new_task' => 'Add New Task',
-    'Create' => 'Create',
+    'create' => 'Create',
 
     //index form
     'tasks' => 'Tasks',
     'add_new' => 'Add New',
+    'apply' => 'Apply',
 
     'col_id' => 'Id',
     'col_status' => 'Status',

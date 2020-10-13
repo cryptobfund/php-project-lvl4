@@ -19,12 +19,29 @@ class TaskController extends Controller
         $this->middleware('auth')->except('index', 'show');
     }
 
-    private function getIndexViewParams()
+    private function getViewParams($task = null)
     {
+        $modelsForSelect = function ($className) {
+            $models = $className::all();
+            return $models->mapWithKeys(function ($model) {
+                return [$model->id => $model->name];
+            });
+        };
+
+        $labelsForSelectSelected = null;
+        if ($task) {
+            $labels = Label::all();
+            $labelsForSelectSelected = collect($labels->modelKeys())
+                ->filter(function ($item) use ($task) {
+                    return $task->labels()->get()->contains($item);
+                });
+        }
+
         return [
-            'taskStatuses' => TaskStatus::all(),
-            'users' => User::all(),
-            'labels' => Label::all()
+            'taskStatusesForSelect' => $modelsForSelect(TaskStatus::class),
+            'usersForSelect' => $modelsForSelect(User::class),
+            'labelsForSelect' => $modelsForSelect(Label::class),
+            'labelsForSelectSelected' => $labelsForSelectSelected
         ];
     }
 
@@ -46,16 +63,8 @@ class TaskController extends Controller
             ])
             ->get();
 
-        $filterActiveValues = [];
-        if ($filter) {
-            $filterActiveValues = [
-                'taskStatusName' => $filter['status_id'] ? TaskStatus::find($filter['status_id'])->name : null,
-                'taskCreatorName' => $filter['created_by_id'] ? User::find($filter['created_by_id'])->name : null,
-                'taskAssigneeName' => $filter['assigned_to_id'] ? User::find($filter['assigned_to_id'])->name : null,
-            ];
-        }
-        $params = $this->getIndexViewParams();
-        return view('task.index', compact('tasks', 'params', 'filter', 'filterActiveValues'));
+        $params = $this->getViewParams();
+        return view('task.index', compact('tasks', 'params', 'filter'));
     }
 
     /**
@@ -66,7 +75,7 @@ class TaskController extends Controller
     public function create()
     {
         $task = new Task();
-        $params = $this->getIndexViewParams();
+        $params = $this->getViewParams();
 
         return view('task.create', compact('task', 'params'));
     }
@@ -115,7 +124,7 @@ class TaskController extends Controller
      */
     public function show(Task $task)
     {
-        $params = $this->getIndexViewParams();
+        $params = $this->getViewParams();
         return view('task.show', compact('task', 'params'));
     }
 
@@ -127,7 +136,7 @@ class TaskController extends Controller
      */
     public function edit(Task $task)
     {
-        $params = $this->getIndexViewParams();
+        $params = $this->getViewParams($task);
         return view('task.edit', compact('task', 'params'));
     }
 
