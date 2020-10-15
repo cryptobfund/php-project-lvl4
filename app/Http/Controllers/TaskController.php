@@ -96,9 +96,11 @@ class TaskController extends Controller
             'assigned_to_id' => 'nullable'
         ]);
         if ($validator->fails()) {
-            foreach ($validator->errors()->all() as $message) {
-                flash($message)->error();
-            }
+            collect($validator->errors()->all())
+                ->each(function ($message) {
+                    flash($message)->error();
+                });
+
             return redirect()->route('tasks.create');
         }
 
@@ -109,9 +111,9 @@ class TaskController extends Controller
         $user = Auth::user();
         $task->creator()->associate($user);
         $task->save();
-        foreach ($data['labels'] as $label) {
+        collect($data['labels'])->each(function ($label) use ($task) {
             $task->labels()->attach($label);
-        }
+        });
         flash(__('task_massages.added'))->success();
         return redirect()->route('tasks.index');
     }
@@ -157,9 +159,11 @@ class TaskController extends Controller
             'assigned_to_id' => 'nullable'
         ]);
         if ($validator->fails()) {
-            foreach ($validator->errors()->all() as $message) {
-                flash($message)->error();
-            }
+            collect($validator->errors()->all())
+                ->each(function ($message) {
+                    flash($message)->error();
+                });
+
             return redirect()->route('tasks.edit', compact('task'));
         }
 
@@ -168,9 +172,9 @@ class TaskController extends Controller
         $task->fill($data)->save();
 
         $task->labels()->detach();
-        foreach ($data['labels'] as $label) {
+        collect($data['labels'])->each(function ($label) use ($task) {
             $task->labels()->attach($label);
-        }
+        });
 
         flash(__('task_massages.updated'))->success();
         return redirect()->route('tasks.index');

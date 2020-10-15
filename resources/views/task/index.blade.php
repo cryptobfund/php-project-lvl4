@@ -4,8 +4,8 @@
 <h1 class="mb-5">{{__('task_massages.tasks')}}</h1>
 
 <div class="d-flex shadow mb-2 px-lg-5 px-md-4 p-sm-3 p-2 rounded">
-    <div class="form-inline">
-        {{Form::open(['route' => ['tasks.index'], 'method' => 'GET'])}}
+    <div>
+        {{Form::open(['route' => ['tasks.index'], 'method' => 'GET', 'class' => 'form-inline'])}}
             {{Form::select(
                 'filter[status_id]',
                 $params['taskStatusesForSelect'],
