@@ -40,24 +40,14 @@ class LabelController extends Controller
     public function store(Request $request)
     {
         //Validation
-        $validator = Validator::make($request->all(), [
+        $data = $request->validate([
             'name' => 'required|unique:labels',
             'description' => 'nullable',
         ]);
-        if ($validator->fails()) {
-            collect($validator->errors()->all())
-                ->each(function ($message) {
-                    flash($message)->error();
-                });
-
-            return redirect()->route('labels.create');
-        }
 
         //create new record
-        $data = $request->input();
         $label = new Label();
-        $label->fill($data);
-        $label->save();
+        $label->fill($data)->save();
 
         flash(__('label_massages.added'))->success();
         return redirect()->route('labels.index');
@@ -95,23 +85,14 @@ class LabelController extends Controller
     public function update(Request $request, Label $label)
     {
         //Validation
-        $validator = Validator::make($request->all(), [
+        $data = $request->validate([
             'name' => "required|unique:labels,name," . $label->id,
             'description' => 'nullable',
         ]);
-        if ($validator->fails()) {
-            collect($validator->errors()->all())
-                ->each(function ($message) {
-                    flash($message)->error();
-                });
-            return redirect()->route('labels.edit', compact('label'));
-        }
 
         //update record
-        $data = $request->input();
-        $label
-            ->fill($data)
-            ->save();
+        $label->fill($data)->save();
+
         flash(__('label_massages.updated'))->success();
         return redirect()->route('labels.index');
     }

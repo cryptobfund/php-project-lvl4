@@ -46,16 +46,11 @@ class TaskStatusController extends Controller
     public function store(Request $request)
     {
         //Validation
-        $validator = Validator::make($request->all(), ['name' => 'required|unique:task_statuses']);
-        if ($validator->fails()) {
-            flash($validator->errors()->first('name'))->error();
-            return redirect()->route('task_statuses.create');
-        }
+        $data = $request->validate(['name' => 'required|unique:task_statuses']);
 
         //create new record
-        $data = $request->input('name');
         $taskStatus = new TaskStatus();
-        $taskStatus->fill(['name' => $data])->save();
+        $taskStatus->fill($data)->save();
 
         flash(__('task_status_massages.added'))->success();
         return redirect()->route('task_statuses.index');
@@ -92,17 +87,13 @@ class TaskStatusController extends Controller
      */
     public function update(Request $request, TaskStatus $taskStatus)
     {
-        //Validation
-        $validator = Validator::make($request->all(), ['name' => 'required|unique:task_statuses']);
-        if ($validator->fails()) {
-            flash($validator->errors()->first('name'))->error();
-            return redirect()->route('task_statuses.edit', $taskStatus);
-        }
+       //Validation
+        $data = $request->validate([
+            'name' => 'required|unique:task_statuses,name,' . $taskStatus->id
+        ]);
 
         //update record
-        $data = $request->input('name');
-        $taskStatus->fill(['name' => $data])->save();
-
+        $taskStatus->fill($data)->save();
         flash(__('task_status_massages.updated'))->success();
         return redirect()->route('task_statuses.index');
     }
@@ -116,8 +107,8 @@ class TaskStatusController extends Controller
     public function destroy(TaskStatus $taskStatus)
     {
         if ($taskStatus) {
-            $tasks = $taskStatus->tasks()->count();
-            if (empty($tasks)) {
+            $tasksAttachedCount = $taskStatus->tasks()->count();
+            if ($tasksAttachedCount === 0) {
                 $taskStatus->delete();
                 flash(__('task_status_massages.removed'))->success();
                 return redirect()->route('task_statuses.index');

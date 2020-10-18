@@ -1,5 +1,8 @@
 <?php
 
+use App\Http\Controllers\LabelController;
+use App\Http\Controllers\TaskController;
+use App\Http\Controllers\TaskStatusController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Route;
@@ -24,8 +27,8 @@ Auth::routes();
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 
-Route::resource('tasks', 'App\Http\Controllers\TaskController');
-
-Route::resource('task_statuses', 'App\Http\Controllers\TaskStatusController');
-
-Route::resource('labels', 'App\Http\Controllers\LabelController');
+Route::resources([
+    'tasks' => TaskController::class,
+    'task_statuses' => TaskStatusController::class,
+    'lebels' => LabelController::class,
+]);

@@ -89,31 +89,25 @@ class TaskController extends Controller
     public function store(Request $request)
     {
         //Validation
-        $validator = Validator::make($request->all(), [
+        $data = $request->validate([
             'name' => 'required|unique:tasks',
             'description' => 'nullable',
             'status_id' => 'required',
-            'assigned_to_id' => 'nullable'
+            'assigned_to_id' => 'nullable',
+            'labels' => 'nullable'
         ]);
-        if ($validator->fails()) {
-            collect($validator->errors()->all())
-                ->each(function ($message) {
-                    flash($message)->error();
-                });
-
-            return redirect()->route('tasks.create');
-        }
 
         //create new record
-        $data = $request->input();
         $task = new Task();
         $task->fill($data);
         $user = Auth::user();
         $task->creator()->associate($user);
         $task->save();
-        collect($data['labels'])->each(function ($label) use ($task) {
-            $task->labels()->attach($label);
-        });
+        if (!empty($data['labels'])) {
+            collect($data['labels'])->each(function ($label) use ($task) {
+                $task->labels()->attach($label);
+            });
+        }
         flash(__('task_massages.added'))->success();
         return redirect()->route('tasks.index');
     }
@@ -152,29 +146,22 @@ class TaskController extends Controller
     public function update(Request $request, Task $task)
     {
         //Validation
-        $validator = Validator::make($request->all(), [
-            'name' => 'required',
+        $data = $request->validate([
+            'name' => 'required|unique:tasks,name,' . $task->id,
             'description' => 'nullable',
             'status_id' => 'required',
-            'assigned_to_id' => 'nullable'
+            'assigned_to_id' => 'nullable',
+            'labels' => 'nullable'
         ]);
-        if ($validator->fails()) {
-            collect($validator->errors()->all())
-                ->each(function ($message) {
-                    flash($message)->error();
-                });
-
-            return redirect()->route('tasks.edit', compact('task'));
-        }
 
         //update record
-        $data = $request->input();
         $task->fill($data)->save();
-
         $task->labels()->detach();
-        collect($data['labels'])->each(function ($label) use ($task) {
-            $task->labels()->attach($label);
-        });
+        if (!empty($data['labels'])) {
+            collect($data['labels'])->each(function ($label) use ($task) {
+                $task->labels()->attach($label);
+            });
+        }
 
         flash(__('task_massages.updated'))->success();
         return redirect()->route('tasks.index');
