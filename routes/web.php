@@ -30,5 +30,5 @@ Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name
 Route::resources([
     'tasks' => TaskController::class,
     'task_statuses' => TaskStatusController::class,
-    'lebels' => LabelController::class,
+    'labels' => LabelController::class,
 ]);
