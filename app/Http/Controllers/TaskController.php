@@ -94,7 +94,6 @@ class TaskController extends Controller
             'description' => 'nullable',
             'status_id' => 'required',
             'assigned_to_id' => 'nullable',
-            'labels' => 'nullable'
         ]);
 
         //create new record
@@ -103,8 +102,10 @@ class TaskController extends Controller
         $user = Auth::user();
         $task->creator()->associate($user);
         $task->save();
-        if (!empty($data['labels'][0])) {
-            $task->labels()->sync($data['labels']);
+
+        $labels = $request->input('labels');
+        if (!empty($labels[0])) {
+            $task->labels()->sync($labels);
         }
         flash(__('task_massages.added'))->success();
         return redirect()->route('tasks.index');
@@ -149,15 +150,15 @@ class TaskController extends Controller
             'description' => 'nullable',
             'status_id' => 'required',
             'assigned_to_id' => 'nullable',
-            'labels' => 'nullable'
         ]);
 
         //update record
         $task->fill($data)->save();
         $task->labels()->detach();
-        //if (!empty($data['labels'][0])) {
-            $task->labels()->sync($data['labels']);
-        //}
+        $labels = $request->input('labels');
+        if (!empty($labels[0])) {
+            $task->labels()->sync($labels);
+        }
 
         flash(__('task_massages.updated'))->success();
         return redirect()->route('tasks.index');
@@ -174,7 +175,7 @@ class TaskController extends Controller
         $this->authorize('delete', $task);
         $task->labels()->detach();
         $task->delete();
-        flash(__('task_massages.removed_deny'))->error();
+        flash(__('task_massages.removed'))->success();
         return redirect()->route('tasks.index');
     }
 }
