@@ -105,13 +105,11 @@ class LabelController extends Controller
      */
     public function destroy(Label $label)
     {
-        if ($label) {
-            $tasks = $label->tasks()->count();
-            if (empty($tasks)) {
-                $label->delete();
-                flash(__('task_status_massages.removed'))->success();
-                return redirect()->route('labels.index');
-            }
+        $tasksAttachedCount = $label->tasks()->count();
+        if ($tasksAttachedCount === 0) {
+            $label->delete();
+            flash(__('task_status_massages.removed'))->success();
+            return redirect()->route('labels.index');
         }
         flash(__('task_status_massages.removed_deny'))->error();
         return redirect()->route('labels.index');

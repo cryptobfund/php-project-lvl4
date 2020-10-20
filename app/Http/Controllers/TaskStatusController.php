@@ -106,13 +106,11 @@ class TaskStatusController extends Controller
      */
     public function destroy(TaskStatus $taskStatus)
     {
-        if ($taskStatus) {
-            $tasksAttachedCount = $taskStatus->tasks()->count();
-            if ($tasksAttachedCount === 0) {
-                $taskStatus->delete();
-                flash(__('task_status_massages.removed'))->success();
-                return redirect()->route('task_statuses.index');
-            }
+        $tasksAttachedCount = $taskStatus->tasks()->count();
+        if ($tasksAttachedCount === 0) {
+            $taskStatus->delete();
+            flash(__('task_status_massages.removed'))->success();
+            return redirect()->route('task_statuses.index');
         }
         flash(__('task_status_massages.removed_deny'))->error();
         return redirect()->route('task_statuses.index');

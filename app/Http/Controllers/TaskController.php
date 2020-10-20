@@ -103,10 +103,8 @@ class TaskController extends Controller
         $user = Auth::user();
         $task->creator()->associate($user);
         $task->save();
-        if (!empty($data['labels'])) {
-            collect($data['labels'])->each(function ($label) use ($task) {
-                $task->labels()->attach($label);
-            });
+        if (!empty($data['labels'][0])) {
+            $task->labels()->sync($data['labels']);
         }
         flash(__('task_massages.added'))->success();
         return redirect()->route('tasks.index');
@@ -157,11 +155,9 @@ class TaskController extends Controller
         //update record
         $task->fill($data)->save();
         $task->labels()->detach();
-        if (!empty($data['labels'])) {
-            collect($data['labels'])->each(function ($label) use ($task) {
-                $task->labels()->attach($label);
-            });
-        }
+        //if (!empty($data['labels'][0])) {
+            $task->labels()->sync($data['labels']);
+        //}
 
         flash(__('task_massages.updated'))->success();
         return redirect()->route('tasks.index');
@@ -175,15 +171,9 @@ class TaskController extends Controller
      */
     public function destroy(Task $task)
     {
-        $user = Auth::user();
-        if ($user->can('delete', $task)) {
-            if ($task) {
-                $task->labels()->detach();
-                $task->delete();
-                flash(__('task_massages.removed'))->success();
-            }
-            return redirect()->route('tasks.index');
-        }
+        $this->authorize('delete', $task);
+        $task->labels()->detach();
+        $task->delete();
         flash(__('task_massages.removed_deny'))->error();
         return redirect()->route('tasks.index');
     }
